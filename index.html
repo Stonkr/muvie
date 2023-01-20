@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Muvie</title>
       <script src="https://cdn.tailwindcss.com"></script>
+      <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
     <div class="header sm:my-4">
@@ -106,11 +107,11 @@
       <div class="flex w-full md:justify-start justify-center items-end">
         <div class="relative mr-4 md:w-full lg:w-full xl:w-1/2 w-2/4">
           
-          <input type="text" id="hero-field" name="hero-field" class="w-full bg-gray-100 rounded border bg-opacity-50 border-gray-300 focus:ring-2 focus:ring-indigo-200 focus:bg-transparent focus:border-indigo-500 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+          <input id="email" type="text" id="hero-field" name="hero-field" class="w-full bg-gray-100 rounded border bg-opacity-50 border-gray-300 focus:ring-2 focus:ring-indigo-200 focus:bg-transparent focus:border-indigo-500 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
         </div>
-        <button class="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">Join!</button>
+        <button class="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg" onclick="onAddEmail()">Join!</button>
       </div>
-      <p class="text-sm mt-2 text-gray-500 mb-8 w-full">Enter your Mail to get Early Acess.</p>
+      <p class="text-sm mt-2 text-gray-500 mb-8 w-full" id="message">Enter your Mail to get Early Acess.</p>
     
     </div>
    
@@ -413,6 +414,31 @@
 <script>
   const button = document.querySelector('#menu-button');
 const menu = document.querySelector('#menu');
+
+function onAddEmail(){
+  const email = document.querySelector('#email').value;
+  console.log(email);
+  let res = axios({
+    method: 'post',
+    url: 'http://app-d451da76-73f0-4755-b7cf-665a8a23ea6a.cleverapps.io/api/addemail',
+    data: {
+      email : email
+    }
+  }).then((response) => {
+    document.querySelector('#message').innerHTML = "Yaaay ! you are on our waitlist"
+     document.querySelector('#message').style.color = "green";
+}).catch((error) => {
+    if( error.response ){
+      console.log(error.response)
+      document.querySelector('#message').innerHTML = error.response.data.error;
+      document.querySelector('#message').style.color = "red";
+    }
+});
+  
+  
+}
+
+
 
 
 button.addEventListener('click', () => {
